@@ -34,11 +34,11 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @PostConstruct
     public void init(){
-        User autumn = userRepository.findByUsername("autumn");
+        User autumn = userRepository.findByUsername("user");
         if(autumn == null){
             User user = new User();
-            user.setUsername("autumn");
-            user.setPassword("pass");
+            user.setUsername("user");
+            user.setPassword("1234");
             System.out.println(this.save(user));
         }
     }
@@ -50,6 +50,6 @@ public class CustomUserDetailService implements UserDetailsService {
     }
 
     private Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.asList(new SimpleGrantedAuthority("ROLE_USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
     }
 }

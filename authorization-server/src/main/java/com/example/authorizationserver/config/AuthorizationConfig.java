@@ -1,7 +1,7 @@
 package com.example.authorizationserver.config;
 
 import com.example.authorizationserver.service.CustomUserDetailService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -11,37 +11,34 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 
+@RequiredArgsConstructor
 @EnableAuthorizationServer
 @Configuration
 public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
-    @Autowired
-    private TokenStore tokenStore;
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    private final TokenStore tokenStore;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final AuthenticationManager authenticationManager;
 
-    @Autowired
-    private CustomUserDetailService userDetailsService;
+    private final PasswordEncoder passwordEncoder;
+
+    private final CustomUserDetailService userDetailsService;
 
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
         clients.inMemory()
-            .withClient("iamclient")
-            .secret(passwordEncoder.encode("iamsecret"))
+            .withClient("oauth2-test")
+            .secret(passwordEncoder.encode("pass"))
             .authorizedGrantTypes("authorization_code", "password", "refresh_token")
             .scopes("read", "write")
             .accessTokenValiditySeconds(60*60)
             .refreshTokenValiditySeconds(6*60*60)
-            .autoApprove(true);
-
+            .autoApprove(true); // scope 확인 요청 안함
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
         endpoints.tokenStore(tokenStore)
             .authenticationManager(authenticationManager)
             .userDetailsService(userDetailsService);
