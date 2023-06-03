@@ -32,6 +32,7 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
             .secret(passwordEncoder.encode("pass"))
             .authorizedGrantTypes("authorization_code", "password", "refresh_token")
             .scopes("read", "write")
+            .redirectUris("http://127.0.0.1:8081")
             .accessTokenValiditySeconds(60*60)
             .refreshTokenValiditySeconds(6*60*60)
             .autoApprove(true); // scope 확인 요청 안함
