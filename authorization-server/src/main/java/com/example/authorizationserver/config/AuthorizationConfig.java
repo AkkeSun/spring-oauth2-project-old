@@ -30,7 +30,7 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
         clients.inMemory()
             .withClient("oauth2-test")
             .secret(passwordEncoder.encode("pass"))
-            .authorizedGrantTypes("authorization_code", "password", "refresh_token")
+            .authorizedGrantTypes("authorization_code", "password", "refresh_token", "client_credentials")
             .scopes("read", "write")
             .redirectUris("http://127.0.0.1:8081")
             .accessTokenValiditySeconds(60*60)
