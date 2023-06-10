@@ -1,14 +1,15 @@
 package com.example.authorizationserver.service;
 
-import com.example.authorizationserver.domain.User;
-import com.example.authorizationserver.repository.UserRepository;
-import java.util.Arrays;
+import com.example.authorizationserver.domain.Member;
+import com.example.authorizationserver.domain.Member_Role;
+import com.example.authorizationserver.repository.MemberRepository;
 import java.util.Collection;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -19,37 +20,34 @@ import org.springframework.stereotype.Service;
 @Service
 public class CustomUserDetailService implements UserDetailsService {
 
-    private final UserRepository userRepository;
+    private final MemberRepository memberRepository;
 
     private final PasswordEncoder passwordEncoder;
 
-    public List<User> findAll() {
-        return userRepository.findAll();
-    }
-
-    public User save(User user) {
+    public Member save(Member user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        return memberRepository.save(user);
     }
 
     @PostConstruct
     public void init(){
-        User autumn = userRepository.findByUsername("user");
-        if(autumn == null){
-            User user = new User();
-            user.setUsername("user");
-            user.setPassword("1234");
-            System.out.println(this.save(user));
+        if(memberRepository.findByUsername("user").isEmpty()){
+            Member member = new Member();
+            member.setUsername("user");
+            member.setPassword("1234");
+            member.setRole(Member_Role.ROLE_USER);
+            System.out.println(this.save(member));
         }
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
-        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthorities());
+        Member member = memberRepository.findByUsername(username).orElseThrow(
+            () -> new UsernameNotFoundException("USER IS NOT EXISTS"));
+        return new User(member.getUsername(), member.getPassword(), getAuthorities(member));
     }
 
-    private Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("ROLE_USER"));
+    private Collection<? extends GrantedAuthority> getAuthorities(Member member) {
+        return List.of(new SimpleGrantedAuthority(member.getRole().name()));
     }
 }
