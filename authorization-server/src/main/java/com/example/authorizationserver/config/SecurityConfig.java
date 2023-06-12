@@ -1,5 +1,6 @@
 package com.example.authorizationserver.config;
 
+import com.example.authorizationserver.provider.CustomAuthenticationProvider;
 import com.example.authorizationserver.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -20,8 +21,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final PasswordEncoder passwordEncoder;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
+    protected void configure(AuthenticationManagerBuilder auth) {
+        auth.authenticationProvider(authenticationProvider());
     }
 
     @Override
@@ -30,14 +31,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             .and()
             .csrf().disable();
         http.authorizeRequests()
-            .antMatchers("/api-docs/**")
-            .permitAll();
-        http.formLogin();
+            .anyRequest().authenticated();
+        http.formLogin().disable();
     }
 
     @Bean
     @Override
     protected AuthenticationManager authenticationManager() throws Exception {
         return super.authenticationManager();
+    }
+
+    @Bean
+    public CustomAuthenticationProvider authenticationProvider() {
+        return new CustomAuthenticationProvider(userDetailsService, passwordEncoder);
     }
 }
