@@ -1,6 +1,6 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.7.12'
+    id 'org.springframework.boot' version '2.1.4.RELEASE'
     id 'io.spring.dependency-management' version '1.0.15.RELEASE'
 }
 
@@ -24,8 +24,7 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     runtimeOnly 'mysql:mysql-connector-java:8.0.30'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation group: 'org.springframework.security.oauth', name: 'spring-security-oauth2', version: '2.3.4.RELEASE'
-    implementation 'org.springframework.security:spring-security-jwt:1.1.1.RELEASE' // jwt 토큰 방식을 쓰기위해 필요한 라이브러리
+    implementation "org.springframework.security.oauth.boot:spring-security-oauth2-autoconfigure:2.6.8"
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 }
