@@ -1,5 +1,5 @@
 package com.example.authorizationserver.domain;
 
-public enum Member_Role {
+public enum Role {
     ROLE_USER, ROLE_ADMIN
 }
