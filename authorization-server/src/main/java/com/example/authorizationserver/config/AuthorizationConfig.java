@@ -2,6 +2,7 @@ package com.example.authorizationserver.config;
 
 import com.example.authorizationserver.service.CustomUserDetailService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,7 +18,8 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 @Configuration
 public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
 
-    private final String JWT_KEY = "hello_my_service";
+    @Value("${jwt.key}")
+    private String JWT_KEY;
 
     private final AuthenticationManager authenticationManager;
 
@@ -30,11 +32,12 @@ public class AuthorizationConfig extends AuthorizationServerConfigurerAdapter {
         clients.inMemory()
             .withClient("oauth2-test")
             .secret(passwordEncoder.encode("pass"))
-            .authorizedGrantTypes("authorization_code", "password", "refresh_token", "client_credentials")
+            .authorizedGrantTypes("authorization_code", "password", "refresh_token",
+                "client_credentials")
             .scopes("read", "write")
             .redirectUris("http://127.0.0.1:8081")
-            .accessTokenValiditySeconds(60*60)
-            .refreshTokenValiditySeconds(6*60*60)
+            .accessTokenValiditySeconds(60 * 5)   // 5분
+            .refreshTokenValiditySeconds(60 * 60) // 1시간
             .autoApprove(true); // scope 확인 요청 안함
     }
 
