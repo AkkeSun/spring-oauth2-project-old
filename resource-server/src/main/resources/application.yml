@@ -1,0 +1,4 @@
+server:
+  port: 8082
+jwt:
+  key: hello_my_service
