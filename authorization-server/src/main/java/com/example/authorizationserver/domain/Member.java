@@ -9,6 +9,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /*
 create table local_test.MEMBER
@@ -29,6 +30,7 @@ create index MEMBER_USERNAME_index
  */
 @Entity
 @Data
+@NoArgsConstructor
 @Table(name = "MEMBER")
 public class Member {
 
@@ -51,4 +53,17 @@ public class Member {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    public Member(MemberDTO memberDTO) {
+        this.username = memberDTO.getUsername();
+        this.password = memberDTO.getPassword();
+        this.snsSync = memberDTO.getSnsSync();
+        this.snsSecretKey = memberDTO.getSnsSecret();
+        this.role = memberDTO.getRole();
+    }
+
+    public void snsSync(MemberDTO memberDTO) {
+        this.snsSync = memberDTO.getSnsSync();
+        this.snsSecretKey = memberDTO.getSnsSecret();
+    }
 }
