@@ -25,16 +25,4 @@ public class MemberDTO {
             throw new RuntimeException("role이 빈 값 입니다");
         }
     }
-
-    public void snsSyncValidate() {
-        if (!StringUtils.hasText(this.username)) {
-            throw new RuntimeException("username이 빈 값 입니다");
-        }
-        if (!StringUtils.hasText(this.password)) {
-            throw new RuntimeException("password이 빈 값 입니다");
-        }
-        if (!StringUtils.hasText(this.role.toString())) {
-            throw new RuntimeException("role이 빈 값 입니다");
-        }
-    }
 }
