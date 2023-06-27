@@ -7,8 +7,8 @@
 * 커스텀 인증 서버의 토큰값으로 사용자를 검증합니다.
 * 권한이 필요한 리소스에 접근시 해더값을 전송해야 합니다
 
-  | Header Key     | Header Value                 |
-      |----------------|------------------------------|
-  | Authorization  | Bearer {Access token String} |
+| Header Key     | Header Value                 |
+|----------------|------------------------------|
+| Authorization  | Bearer {Access token String} |
 
 <br>
